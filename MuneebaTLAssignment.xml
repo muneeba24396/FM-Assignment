@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+chan on,off;</declaration>
+	<template>
+		<name>Centre</name>
+		<location id="id0" x="-8" y="-161">
+			<name x="-18" y="-195">busy</name>
+		</location>
+		<location id="id1" x="0" y="0">
+			<name x="-10" y="-34">free</name>
+		</location>
+		<init ref="id1"/>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="10" y="-148">off?</label>
+			<nail x="68" y="-102"/>
+			<nail x="68" y="-102"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-58" y="-51">on?</label>
+			<nail x="-76" y="-68"/>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">TrafficLight</name>
+		<declaration>// Place local declarations here.
+clock y;</declaration>
+		<location id="id2" x="170" y="-238">
+			<name x="160" y="-272">GreenLight</name>
+			<label kind="invariant" x="160" y="-221">y&lt;=40</label>
+		</location>
+		<location id="id3" x="-255" y="-263">
+			<name x="-265" y="-297">RedLight</name>
+		</location>
+		<location id="id4" x="0" y="0">
+		</location>
+		<init ref="id4"/>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="18" y="-21">off!</label>
+			<nail x="161" y="-8"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id4"/>
+			<nail x="-255" y="8"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="18" y="-136">on!</label>
+			<label kind="assignment" x="18" y="-119">y=0</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id3"/>
+		</transition>
+	</template>
+	<system>//Muneeba Fatima
+  
+t1=TrafficLight();
+t2=TrafficLight();
+t3=TrafficLight();
+t4=TrafficLight();
+
+system  t1,t2,t3,t4,Centre; </system>
+	<queries>
+		<query>
+			<formula>A[]  (t2.GreenLight imply not (t1.GreenLight &amp;&amp; t3.GreenLight &amp;&amp; t4.GreenLight))
+			</formula>
+			<comment>Mutex
+			</comment>
+		</query>
+		<query>
+			<formula>A[]  (t1.GreenLight imply not (t2.GreenLight &amp;&amp; t3.GreenLight &amp;&amp; t4.GreenLight))
+			</formula>
+			<comment>All green lights are mutually exclusive
+			</comment>
+		</query>
+		<query>
+			<formula>A[]  (t3.GreenLight imply not (t2.GreenLight &amp;&amp; t1.GreenLight &amp;&amp; t4.GreenLight))
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; deadlock
+
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>A[] not deadlock
+
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (t4.GreenLight imply ( t4.y&lt;=40) )
+			</formula>
+			<comment>There exists a state where TrafficLight 4 will be green when y is less than 40.
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (t3.GreenLight imply ( t3.y&lt;=40) )
+			</formula>
+			<comment>There exists a state where TrafficLight 3will be green when y is less than 40.
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (t2.GreenLight imply ( t2.y&lt;=40) )
+			</formula>
+			<comment>There exists a state where TrafficLight 2 will be green when y is less than 40.
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (t1.GreenLight imply ( t1.y&lt;=40) )
+			</formula>
+			<comment>There exists a state where TrafficLight 1 will be green when y is less than 40.
+			</comment>
+		</query>
+		<query>
+			<formula>A[]  (t4.GreenLight imply not (t2.GreenLight &amp;&amp; t3.GreenLight &amp;&amp; t1.GreenLight))
+			</formula>
+			<comment>
+			</comment>
+		</query>
+	</queries>
+</nta>
